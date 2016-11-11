@@ -1,7 +1,13 @@
-(function(window, document){
+if($ == undefined && Zepto == undefined) {
+	console.info('Zepto is require.');
+}
+
+var msg = new RegExp("", "");
+
+;(function(window, document){
 	'use strict';
 
-	window.util = {
+	var util = {
 		init: function(){
 
 		},
@@ -11,7 +17,13 @@
 		clear: function(){
 
 		},
-		// 格式化金额，保留两位小数使用截取方式
+		/**
+		 * @description [格式化金额，保留两位小数使用截取方式]
+		 * @example
+		 * var number = util.toFixed(20.563258545);
+		 * @param  {[number or string]} value [输入值]
+		 * @return {[string]}       [返回结果]
+		 */
 		toFixed: function(value){
 			var bb = value + '';
 			var dot = bb.indexOf('.');
@@ -47,6 +59,13 @@
 				result = num + result;
 			}
 			return result;
+		},
+		// 将后台字符串("/Date(1462060800000)/")转化为 Date 对象
+		strToDate: function(str){
+			var date = new Date(str);
+			
 		}
 	}
+
+	window.util = util;
 })(this, document);
