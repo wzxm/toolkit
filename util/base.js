@@ -7,6 +7,13 @@ var msg = new RegExp("", "");
 ;(function(window, document){
 	'use strict';
 
+	/* 扩展 zepto 方法，编写插件 */
+	$.extend($.fn, {
+		foo: function(obj) {
+			return this.each(function(){ this.innerHTML = obj });
+		}
+	});
+
 	var util = {
 		init: function(){
 
@@ -64,6 +71,27 @@ var msg = new RegExp("", "");
 		strToDate: function(str){
 			var date = new Date(str);
 			
+		},
+		// 改编 ajax 请求。固定传入 token 值
+		ajax: function(opt) {
+			// 将 opt 进行合并到 {} 中
+			var $opt = $.extend({}, opt);
+			if(opt.data != undefined) {
+				$opt.data.__RequestVerificationToken = util.getAntiForgeryToken();
+
+				$opt.error = function() {
+					opt.error && opt.error();
+				}
+			}
+			$.ajax($opt);
+		},
+		// 获取页面 token
+		getAntiForgeryToken: function() {
+			var tokenFiled = $("input[name='__RequestVerificationToken']");
+			if(tokenFiled.length > 0) {
+				return tokenFiled.val();
+			}
+			return null;
 		}
 	}
 
